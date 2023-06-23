@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-// const database = require("./config/db");
+const database = require("./config/db");
+const userAuthRoute = require("./routes/userAuth");
 // const listRoute = require("./routes/taskList");
 
 // const clientUrl = require("./config/clientUrl");
@@ -10,23 +11,23 @@ const bodyParser = require("body-parser");
 var cors = require("cors");
 require("dotenv").config();
 
-// mongoose.Promise = global.Promise;
-// mongoose
-//   .connect(database.url, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(
-//     () => {
-//       console.log("Database sucessfully connected ");
-//     },
-//     (error) => {
-//       console.log("Database error: " + error);
-//     }
-//   );
+mongoose.Promise = global.Promise;
+mongoose
+  .connect(database.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(
+    () => {
+      console.log("Database sucessfully connected ");
+    },
+    (error) => {
+      console.log("Database error: " + error);
+    }
+  );
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // Static directory path
@@ -40,6 +41,10 @@ app.get("/", (req, res) => {
   res.send("hello");
   console.log("server started, base API hit and working fine!!");
 });
+
+//Routes
+
+app.use("/userAuth", userAuthRoute);
 
 // PORT
 const port = process.env.PORT || 8000;
