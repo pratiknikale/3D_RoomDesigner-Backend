@@ -1,8 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import googleLogo from "../assets/googleLogo.png";
 import {Button, Container, Grid, Typography, TextField, Box, Paper, Link} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {signup, login} from "../api/api";
-// import { useSelector } from "react-redux/es/exports";
+import {signinFieldHandler, loginFieldHandler, loginSubmit, submitSignup} from "./handlers/authHandlers";
+import {useSelector, useDispatch} from "react-redux";
+import {setLoggedUser} from "../reduxStore/user/userSlice";
+
+// import {protectedRouteTest} from "../api/api";
 
 const signupFormFields = {
   FirstName: "",
@@ -15,15 +19,17 @@ const loginFormFields = {
   Password: "",
 };
 
-const Auth = (props) => {
+const Auth = ({messageOpen, setMessageOpen}) => {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   // const user = useSelector((state) => state.user.user);
   const [isSignup, setIsSignup] = useState(false);
   const [signupData, setSignupData] = useState(signupFormFields);
   const [loginData, setLoginData] = useState(loginFormFields);
 
-  const handleSigninLogin = (e, operation) => {
+  const switchSigninLogin = (e, operation) => {
     e.preventDefault();
     if (operation === "login") {
       setIsSignup(false);
@@ -32,45 +38,21 @@ const Auth = (props) => {
     }
   };
 
-  const signinFieldHandler = (e) => {
-    e.preventDefault();
-    setSignupData({...signupData, [e.target.name]: e.target.value});
-  };
-  const loginFieldHandler = (e) => {
-    e.preventDefault();
-    setLoginData({...loginData, [e.target.name]: e.target.value});
-  };
-  const submitSignup = async (e) => {
-    e.preventDefault();
-    await signup(signupData, navigate).then((result) => {
-      if (result.error) {
-        props.setMessageOpen({show: true, status: "failed", message: result.message});
-        setTimeout(() => {
-          props.setMessageOpen({...props.messageOpen, status: "failed", show: false});
-        }, 4000);
-      } else {
-        props.setMessageOpen({show: true, status: "success", message: "Successfully created new account and loggedIn"});
-        setTimeout(() => {
-          props.setMessageOpen({...props.messageOpen, status: "success", show: false});
-        }, 4000);
-      }
-    });
-  };
-  const loginSubmit = async (e) => {
-    e.preventDefault();
-    await login(loginData, navigate).then((result) => {
-      if (result.error) {
-        props.setMessageOpen({show: true, status: "failed", message: result.message});
-        setTimeout(() => {
-          props.setMessageOpen({...props.messageOpen, status: "failed", show: false});
-        }, 4000);
-      } else {
-        props.setMessageOpen({show: true, status: "success", message: "Successfully LoggedIn"});
-        setTimeout(() => {
-          props.setMessageOpen({...props.messageOpen, status: "success", show: false});
-        }, 4000);
-      }
-    });
+  // useEffect(() => {
+  //   (async function () {
+  //     const res = await protectedRouteTest();
+  //     document.getElementById("protectionTest").innerHTML = JSON.stringify(res);
+  //   })();
+  // }, []);
+  useEffect(() => {
+    const loggedUser = JSON.parse(localStorage.getItem("3D-designerProfile"));
+    if (loggedUser) {
+      navigate("/DesignerPage");
+    }
+  }, []);
+
+  const google = () => {
+    window.open("http://localhost:8000/userAuth/google/callback", "_self");
   };
 
   // useEffect(() => {
@@ -82,8 +64,9 @@ const Auth = (props) => {
   return (
     <>
       <Container style={{paddingTop: "40px"}} fixed>
+        {/* <span id="protectionTest"></span> */}
         <Paper style={{borderRadius: "15px"}} elevation={3} sx={{marginRight: "20%", marginLeft: "20%"}}>
-          <Box sx={{padding: 5}}>
+          <Box sx={{padding: 5, display: "flex", textAlign: "center", flexDirection: "column"}}>
             <Grid container>
               <Grid item xs={12} sm={3} />
               <Grid container>
@@ -91,7 +74,7 @@ const Auth = (props) => {
                   <Typography align="center" variant="h6" gutterBottom sx={{paddingBottom: 6}}>
                     <Button
                       onClick={(e) => {
-                        handleSigninLogin(e, "login");
+                        switchSigninLogin(e, "login");
                       }}
                       variant="contained"
                       style={{
@@ -111,7 +94,7 @@ const Auth = (props) => {
                   <Typography align="center" variant="h6" gutterBottom sx={{paddingBottom: 6}}>
                     <Button
                       onClick={(e) => {
-                        handleSigninLogin(e, "signup");
+                        switchSigninLogin(e, "signup");
                       }}
                       variant="contained"
                       style={{
@@ -146,7 +129,7 @@ const Auth = (props) => {
                       variant="outlined"
                       InputProps={{sx: {borderRadius: 3, border: "1px solid #e2e2e1"}}}
                       value={signupData.FirstName}
-                      onChange={(e) => signinFieldHandler(e)}
+                      onChange={(e) => signinFieldHandler(e, signupData, setSignupData)}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -161,7 +144,7 @@ const Auth = (props) => {
                       variant="outlined"
                       InputProps={{sx: {borderRadius: 3, border: "1px solid #e2e2e1"}}}
                       value={signupData.LastName}
-                      onChange={(e) => signinFieldHandler(e)}
+                      onChange={(e) => signinFieldHandler(e, signupData, setSignupData)}
                     />
                   </Grid>
                   <Grid item xs={12} sm={12}>
@@ -176,7 +159,7 @@ const Auth = (props) => {
                       variant="outlined"
                       InputProps={{sx: {borderRadius: 3, border: "1px solid #e2e2e1"}}}
                       value={signupData.Email}
-                      onChange={(e) => signinFieldHandler(e)}
+                      onChange={(e) => signinFieldHandler(e, signupData, setSignupData)}
                     />
                   </Grid>
                   <Grid item xs={12} sm={12}>
@@ -192,18 +175,18 @@ const Auth = (props) => {
                       variant="outlined"
                       InputProps={{sx: {borderRadius: 3, border: "1px solid #e2e2e1"}}}
                       value={signupData.Password}
-                      onChange={(e) => signinFieldHandler(e)}
+                      onChange={(e) => signinFieldHandler(e, signupData, setSignupData)}
                     />
                   </Grid>
                   <Grid item xs={12} sm={12} />
                   <Grid item xs={12} sm={12} style={{display: "flex", justifyContent: "center"}}>
                     <Button
                       onClick={(e) => {
-                        submitSignup(e);
+                        submitSignup(e, signupData, messageOpen, setMessageOpen, navigate);
                       }}
                       variant="contained"
                       sx={{
-                        width: "120px",
+                        width: "260px",
                         borderRadius: "15px",
                         color: "white",
                         background:
@@ -229,7 +212,7 @@ const Auth = (props) => {
                       variant="outlined"
                       InputProps={{sx: {borderRadius: 3, border: "1px solid #e2e2e1"}}}
                       value={loginData.Email}
-                      onChange={(e) => loginFieldHandler(e)}
+                      onChange={(e) => loginFieldHandler(e, loginData, setLoginData)}
                     />
                   </Grid>
                   <Grid item xs={12} sm={12}>
@@ -245,7 +228,7 @@ const Auth = (props) => {
                       variant="outlined"
                       InputProps={{sx: {borderRadius: 3, border: "1px solid #e2e2e1"}}}
                       value={loginData.Password}
-                      onChange={(e) => loginFieldHandler(e)}
+                      onChange={(e) => loginFieldHandler(e, loginData, setLoginData)}
                     />
                   </Grid>
 
@@ -258,11 +241,11 @@ const Auth = (props) => {
                   <Grid item xs={12} sm={12} style={{display: "flex", justifyContent: "center"}}>
                     <Button
                       onClick={(e) => {
-                        loginSubmit(e);
+                        loginSubmit(e, loginData, messageOpen, setMessageOpen, navigate);
                       }}
                       variant="contained"
                       sx={{
-                        width: "120px",
+                        width: "260px",
                         borderRadius: "15px",
                         color: "white",
                         background:
@@ -274,6 +257,19 @@ const Auth = (props) => {
                   </Grid>
                 </Grid>
               )}
+              <hr style={{marginTop: "22px", marginBottom: "22px"}} />
+              <Button
+                onClick={google}
+                variant="outlined"
+                sx={{
+                  width: "260px",
+                  borderRadius: "15px",
+                  textTransform: "none",
+                }}
+              >
+                <img style={{width: "25px", paddingRight: "5px"}} src={googleLogo} />
+                Continue with google
+              </Button>
             </div>
           </Box>
         </Paper>

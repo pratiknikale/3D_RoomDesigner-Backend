@@ -2,7 +2,7 @@ import "./App.css";
 import {useState, forwardRef} from "react";
 import Auth from "./pages/Auth";
 import DesignerPage from "./pages/DesignerPage";
-import ProtectedRoute from "./pages/components/protectedRoutes";
+import ProtectedRoute from "./pages/commonComponents/protectedRoutes";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";

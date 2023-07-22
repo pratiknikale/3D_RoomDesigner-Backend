@@ -37,3 +37,8 @@ export const login = async (Data, navigate) => {
     return {error: true, message: error.response.data.message};
   }
 };
+
+export const protectedRouteTest = async () => {
+  const result = await API.get("/userAuth/protectedCheckJWT");
+  return result;
+};

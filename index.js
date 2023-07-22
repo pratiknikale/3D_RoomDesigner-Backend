@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const database = require("./config/db");
 const userAuthRoute = require("./routes/userAuth");
+// const cookieSession = require("cookie-session");
+const passport = require("passport");
+const passportSetup = require("./passport");
 // const listRoute = require("./routes/taskList");
 
 // const clientUrl = require("./config/clientUrl");
@@ -26,8 +29,11 @@ mongoose
     }
   );
 
+// app.use(cookieSession({name: "session", keys: ["pratik"], maxAge: 24 * 60 * 60 * 100}));
+// app.use(passport.initialize());
+// app.use(passport.session());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 
 // Static directory path
