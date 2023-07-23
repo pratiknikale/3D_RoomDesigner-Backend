@@ -42,7 +42,12 @@ userAuth.get(
         res.status(400).redirect("http://localhost:3000");
       } else {
         const jsonStringSuccess = JSON.stringify({result: req.user.result, token: req.user.token});
-        res.cookie("3DDesigner_token", {result: req.user.result, token: req.user.token});
+        res.cookie("_3DDesigner_token", req.user.token, {
+          secure: false,
+          httpOnly: true,
+          maxAge: 12 * 60 * 60 * 1000,
+        });
+        res.cookie("3DDesigner_userProfile", req.user.result);
         res.status(200).redirect("http://localhost:3000/DesignerPage");
       }
     }
@@ -71,7 +76,13 @@ userAuth.post("/signup", async (req, res) => {
 
       const result = await newUser.save();
       const token = jwt.sign({email: result.email, id: result._id}, process.env.JWT_SECRET_KEY, {expiresIn: "1d"});
-      res.status(200).json({result, token});
+
+      res.cookie("_3DDesigner_token", token, {
+        secure: false,
+        httpOnly: true,
+        maxAge: 12 * 60 * 60 * 1000,
+      });
+      res.status(200).json(result);
     };
 
     saveUser();
@@ -94,7 +105,24 @@ userAuth.post("/login", async (req, res) => {
     if (!isPasswordCorrect) return res.status(400).json({message: "Invalid Password"});
 
     const token = jwt.sign({email: email, id: result._id}, process.env.JWT_SECRET_KEY, {expiresIn: "1d"});
-    res.status(200).json({result, token});
+    res.cookie("_3DDesigner_token", token, {
+      secure: false,
+      httpOnly: true,
+      maxAge: 12 * 60 * 60 * 1000,
+    });
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({message: "Something went wrong"});
+    console.log(err);
+  }
+});
+
+userAuth.get("/logOut", async (req, res) => {
+  try {
+    res.clearCookie("_3DDesigner_token");
+    res.clearCookie("3DDesigner_userProfile");
+
+    res.send();
   } catch (err) {
     res.status(500).json({message: "Something went wrong"});
     console.log(err);
@@ -102,6 +130,7 @@ userAuth.post("/login", async (req, res) => {
 });
 
 userAuth.get("/protectedCheckJWT", protected, async (req, res) => {
+  console.log("protectedCheckJWT API:::: ", req.cookies._3DDesigner_token);
   res.status(200).json({message: "protected route is accessed"});
 });
 

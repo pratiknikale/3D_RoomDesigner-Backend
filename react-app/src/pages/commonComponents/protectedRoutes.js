@@ -8,7 +8,7 @@ import {useLocation} from "react-router-dom";
 function ProtectedRoute(props) {
   const location = useLocation();
 
-  const cookieToken = Cookies.get("3DDesigner_token");
+  const cookieToken = Cookies.get("3DDesigner_userProfile");
   if (cookieToken) {
     let resCookieToken = cookieToken.substring(2, cookieToken.length);
     localStorage.setItem("3D-designerProfile", resCookieToken);

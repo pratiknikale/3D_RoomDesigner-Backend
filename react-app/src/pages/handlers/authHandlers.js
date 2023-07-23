@@ -1,4 +1,5 @@
-import {signup, login} from "../../api/api";
+import {signup, login, logOut} from "../../api/api";
+import {logoutUser} from "../../reduxStore/user/userSlice";
 
 const signinFieldHandler = (e, signupData, setSignupData) => {
   e.preventDefault();
@@ -44,4 +45,14 @@ const loginSubmit = async (e, loginData, messageOpen, setMessageOpen, navigate) 
   });
 };
 
-export {signinFieldHandler, loginFieldHandler, submitSignup, loginSubmit};
+const logout = async (e, dispatch, navigate) => {
+  e.preventDefault();
+  localStorage.clear("3D-designerProfile");
+  dispatch(logoutUser());
+  let res = await logOut();
+  if (res.statusText == "OK") {
+    navigate("/");
+  }
+};
+
+export {signinFieldHandler, loginFieldHandler, submitSignup, loginSubmit, logout};

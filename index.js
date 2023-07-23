@@ -7,9 +7,7 @@ const userAuthRoute = require("./routes/userAuth");
 // const cookieSession = require("cookie-session");
 const passport = require("passport");
 const passportSetup = require("./passport");
-// const listRoute = require("./routes/taskList");
-
-// const clientUrl = require("./config/clientUrl");
+const cookieParser = require("cookie-parser");
 
 var cors = require("cors");
 require("dotenv").config();
@@ -34,7 +32,8 @@ mongoose
 // app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cors());
+app.use(cors({origin: "http://localhost:3000", credentials: true}));
+app.use(cookieParser());
 
 // Static directory path
 // app.use(express.static(path.join(__dirname, "dist/CRUDapp")));
