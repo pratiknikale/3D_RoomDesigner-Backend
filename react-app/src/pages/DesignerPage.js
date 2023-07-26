@@ -1,25 +1,25 @@
 import React, {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
 import {Container, Grid, Button} from "@mui/material";
 import {useSelector, useDispatch} from "react-redux";
-import {logout} from "./handlers/authHandlers";
+import {setLoggedUser} from "../reduxStore/user/userSlice";
 
 const DesignerPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
+  const user = useSelector((state) => state.user.user);
+
+  useEffect(() => {
+    if (!user.email) {
+      const localStorageProfile = localStorage.getItem("3D-designerProfile");
+      if (localStorageProfile) {
+        dispatch(setLoggedUser(JSON.parse(localStorageProfile)));
+      }
+    }
+  }, []);
   return (
     <>
-      <Container style={{paddingTop: "40px"}} fixed>
+      <Container style={{paddingTop: "110px"}} fixed>
         <h1 style={{color: "white"}}>You are logged in</h1>
-        <Button
-          onClick={(e) => logout(e, dispatch, navigate)}
-          variant="contained"
-          style={{
-            borderRadius: "15px",
-          }}
-        >
-          <span>Logout</span>
-        </Button>
       </Container>
     </>
   );

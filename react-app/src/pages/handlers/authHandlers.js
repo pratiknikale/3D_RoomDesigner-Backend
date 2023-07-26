@@ -1,5 +1,5 @@
 import {signup, login, logOut} from "../../api/api";
-import {logoutUser} from "../../reduxStore/user/userSlice";
+import {logoutUser, setLoggedUser} from "../../reduxStore/user/userSlice";
 
 const signinFieldHandler = (e, signupData, setSignupData) => {
   e.preventDefault();
@@ -10,7 +10,7 @@ const loginFieldHandler = (e, loginData, setLoginData) => {
   setLoginData({...loginData, [e.target.name]: e.target.value});
 };
 
-const submitSignup = async (e, signupData, messageOpen, setMessageOpen, navigate) => {
+const submitSignup = async (e, signupData, messageOpen, setMessageOpen, navigate, dispatch) => {
   e.preventDefault();
   await signup(signupData, navigate).then((result) => {
     if (result.error) {
@@ -21,13 +21,14 @@ const submitSignup = async (e, signupData, messageOpen, setMessageOpen, navigate
     } else {
       // dispatch(setLoggedUser(result.data));
       setMessageOpen({show: true, status: "success", message: "Successfully created new account and loggedIn"});
+      dispatch(setLoggedUser(result.data));
       setTimeout(() => {
         setMessageOpen({...messageOpen, status: "success", show: false});
       }, 4000);
     }
   });
 };
-const loginSubmit = async (e, loginData, messageOpen, setMessageOpen, navigate) => {
+const loginSubmit = async (e, loginData, messageOpen, setMessageOpen, navigate, dispatch) => {
   e.preventDefault();
   await login(loginData, navigate).then((result) => {
     if (result.error) {
@@ -38,6 +39,7 @@ const loginSubmit = async (e, loginData, messageOpen, setMessageOpen, navigate) 
     } else {
       // dispatch(setLoggedUser(result.data));
       setMessageOpen({show: true, status: "success", message: "Successfully LoggedIn"});
+      dispatch(setLoggedUser(result.data));
       setTimeout(() => {
         setMessageOpen({...messageOpen, status: "success", show: false});
       }, 4000);

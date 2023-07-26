@@ -11,6 +11,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import Header from "./pages/commonComponents/layOuts/Header";
 
 // color comb
 // 1. #659DBD
@@ -38,6 +39,7 @@ function App() {
       </Stack>
       <BrowserRouter>
         {/* <Header /> */}
+        <Header />
         {/* <SocketContext.Provider value={socket}>
         {user.result && socket && <Sidebar />} */}
         {/* <div className={user.result ? "mainContainer" : "notLoggedMainContainer"}> */}

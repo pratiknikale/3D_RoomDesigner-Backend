@@ -4,7 +4,6 @@ import {Button, Container, Grid, Typography, TextField, Box, Paper, Link} from "
 import {useNavigate} from "react-router-dom";
 import {signinFieldHandler, loginFieldHandler, loginSubmit, submitSignup} from "./handlers/authHandlers";
 import {useSelector, useDispatch} from "react-redux";
-import {setLoggedUser} from "../reduxStore/user/userSlice";
 
 // import {protectedRouteTest} from "../api/api";
 
@@ -21,7 +20,6 @@ const loginFormFields = {
 
 const Auth = ({messageOpen, setMessageOpen}) => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   // const user = useSelector((state) => state.user.user);
@@ -63,10 +61,13 @@ const Auth = ({messageOpen, setMessageOpen}) => {
 
   return (
     <>
-      <Container style={{paddingTop: "40px"}} fixed>
+      <Container style={{paddingTop: "110px"}} fixed>
         {/* <span id="protectionTest"></span> */}
         <Paper style={{borderRadius: "15px"}} elevation={3} sx={{marginRight: "20%", marginLeft: "20%"}}>
-          <Box sx={{padding: 5, display: "flex", textAlign: "center", flexDirection: "column"}}>
+          <Box
+            style={{backgroundColor: "#e2e2e1", borderRadius: "12px", boxShadow: "0px 0px 14px rgba(0, 0, 0, 0.87)"}}
+            sx={{padding: 8, display: "flex", textAlign: "center", flexDirection: "column"}}
+          >
             <Grid container>
               <Grid item xs={12} sm={3} />
               <Grid container>
@@ -182,7 +183,7 @@ const Auth = ({messageOpen, setMessageOpen}) => {
                   <Grid item xs={12} sm={12} style={{display: "flex", justifyContent: "center"}}>
                     <Button
                       onClick={(e) => {
-                        submitSignup(e, signupData, messageOpen, setMessageOpen, navigate);
+                        submitSignup(e, signupData, messageOpen, setMessageOpen, navigate, dispatch);
                       }}
                       variant="contained"
                       sx={{
@@ -241,7 +242,7 @@ const Auth = ({messageOpen, setMessageOpen}) => {
                   <Grid item xs={12} sm={12} style={{display: "flex", justifyContent: "center"}}>
                     <Button
                       onClick={(e) => {
-                        loginSubmit(e, loginData, messageOpen, setMessageOpen, navigate);
+                        loginSubmit(e, loginData, messageOpen, setMessageOpen, navigate, dispatch);
                       }}
                       variant="contained"
                       sx={{
