@@ -1,9 +1,9 @@
 import "./App.css";
-import {useState, forwardRef} from "react";
+import { useState, forwardRef } from "react";
 import Auth from "./pages/Auth";
 import DesignerPage from "./pages/DesignerPage";
 import ProtectedRoute from "./pages/commonComponents/protectedRoutes";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -12,6 +12,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Header from "./pages/commonComponents/layOuts/Header";
+import DashboardPage from "./pages/DashboardPage";
 
 // color comb
 // 1. #659DBD
@@ -27,22 +28,18 @@ const Alert = forwardRef(function Alert(props, ref) {
 });
 
 function App() {
-  const [messageOpen, setMessageOpen] = useState({show: false, status: "", message: ""});
+  const [messageOpen, setMessageOpen] = useState({ show: false, status: "", message: "" });
   return (
     <>
-      <Stack spacing={2} sx={{width: "100%"}}>
+      <Stack spacing={2} sx={{ width: "100%" }}>
         <Snackbar open={messageOpen.show} autoHideDuration={6000}>
-          <Alert severity={messageOpen.status === "failed" ? "error" : "success"} sx={{width: "100%"}}>
+          <Alert severity={messageOpen.status === "failed" ? "error" : "success"} sx={{ width: "100%" }}>
             {messageOpen.message}
           </Alert>
         </Snackbar>
       </Stack>
       <BrowserRouter>
-        {/* <Header /> */}
         <Header />
-        {/* <SocketContext.Provider value={socket}>
-        {user.result && socket && <Sidebar />} */}
-        {/* <div className={user.result ? "mainContainer" : "notLoggedMainContainer"}> */}
         <div
           style={{
             height: "100%",
@@ -53,19 +50,12 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Auth setMessageOpen={setMessageOpen} messageOpen={messageOpen} />} />
             <Route element={<ProtectedRoute />}>
+              <Route exact path="/DashboardPage" element={<DashboardPage />} />
               <Route exact path="/DesignerPage" element={<DesignerPage />} />
-              {/* <Route element={<ProtectedManagerRoute />}>
-                <Route exact path="/ManageEmployee" element={<ManageEmployee />} />
-                <Route exact path="/ManageManager" element={<ManageManager />} />
-                <Route exact path="/Assigned" element={<Assigned />} />
-              </Route>
-              <Route exact path="/Chats" element={<Chats />} />
-              <Route exact path="/Settings" element={<Settings />} /> */}
             </Route>
           </Routes>
           {/* <Footer /> */}
         </div>
-        {/* </SocketContext.Provider> */}
       </BrowserRouter>
     </>
   );
