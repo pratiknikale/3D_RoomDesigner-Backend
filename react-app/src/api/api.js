@@ -1,6 +1,7 @@
 import axios from "axios";
+// require('dotenv').config()
 
-const API = axios.create({ baseURL: "http://localhost:8000" });
+const API = axios.create({ baseURL: `http://${process.env.REACT_APP_BACKEND_BASE_URL}:${process.env.REACT_APP_BACKEND_BASE_PORT}` });
 
 export const signup = async (data, navigate) => {
   try {
@@ -9,7 +10,7 @@ export const signup = async (data, navigate) => {
     navigate("/DashboardPage");
     return signUp;
   } catch (error) {
-    return { error: true, message: error.response.data.message };
+    return { error: true, message: error?.response?.data?.message };
   }
 };
 
@@ -20,7 +21,7 @@ export const login = async (Data, navigate) => {
     navigate("/DashboardPage");
     return signIn;
   } catch (error) {
-    return { error: true, message: error.response.data.message };
+    return { error: true, message: error?.response?.data?.message };
   }
 };
 

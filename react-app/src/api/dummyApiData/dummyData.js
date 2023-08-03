@@ -28,6 +28,54 @@ const projects = [{
     projectType: "Bed Room",
     createdDate: "01-02-2023",
     updatedDate: "21-02-2023",
+}, {
+    id: 6,
+    projectName: "Project-5",
+    projectType: "Bed Room",
+    createdDate: "01-02-2023",
+    updatedDate: "21-02-2023",
+}
+    , {
+    id: 7,
+    projectName: "Project-5",
+    projectType: "Bed Room",
+    createdDate: "01-02-2023",
+    updatedDate: "21-02-2023",
+}
+    , {
+    id: 8,
+    projectName: "Project-5",
+    projectType: "Bed Room",
+    createdDate: "01-02-2023",
+    updatedDate: "21-02-2023",
+}
+    , {
+    id: 9,
+    projectName: "Project-5",
+    projectType: "Bed Room",
+    createdDate: "01-02-2023",
+    updatedDate: "21-02-2023",
+}
+    , {
+    id: 10,
+    projectName: "Project-5",
+    projectType: "Bed Room",
+    createdDate: "01-02-2023",
+    updatedDate: "21-02-2023",
+}
+    , {
+    id: 11,
+    projectName: "Project-5",
+    projectType: "Bed Room",
+    createdDate: "01-02-2023",
+    updatedDate: "21-02-2023",
+}
+    , {
+    id: 12,
+    projectName: "Project-5",
+    projectType: "Bed Room",
+    createdDate: "01-02-2023",
+    updatedDate: "21-02-2023",
 }]
 
 export { projects };

@@ -1,29 +1,30 @@
-import {signup, login, logOut} from "../../api/api";
-import {logoutUser, setLoggedUser} from "../../reduxStore/user/userSlice";
+import { signup, login, logOut } from "../../api/api";
+import { logoutUser, setLoggedUser } from "../../reduxStore/user/userSlice";
+import { setProjectList } from "../../reduxStore/projects/projectSlice";
 
 const signinFieldHandler = (e, signupData, setSignupData) => {
   e.preventDefault();
-  setSignupData({...signupData, [e.target.name]: e.target.value});
+  setSignupData({ ...signupData, [e.target.name]: e.target.value });
 };
 const loginFieldHandler = (e, loginData, setLoginData) => {
   e.preventDefault();
-  setLoginData({...loginData, [e.target.name]: e.target.value});
+  setLoginData({ ...loginData, [e.target.name]: e.target.value });
 };
 
 const submitSignup = async (e, signupData, messageOpen, setMessageOpen, navigate, dispatch) => {
   e.preventDefault();
   await signup(signupData, navigate).then((result) => {
     if (result.error) {
-      setMessageOpen({show: true, status: "failed", message: result.message});
+      setMessageOpen({ show: true, status: "failed", message: result.message });
       setTimeout(() => {
-        setMessageOpen({...messageOpen, status: "failed", show: false});
+        setMessageOpen({ ...messageOpen, status: "failed", show: false });
       }, 4000);
     } else {
       // dispatch(setLoggedUser(result.data));
-      setMessageOpen({show: true, status: "success", message: "Successfully created new account and loggedIn"});
+      setMessageOpen({ show: true, status: "success", message: "Successfully created new account and loggedIn" });
       dispatch(setLoggedUser(result.data));
       setTimeout(() => {
-        setMessageOpen({...messageOpen, status: "success", show: false});
+        setMessageOpen({ ...messageOpen, status: "success", show: false });
       }, 4000);
     }
   });
@@ -32,16 +33,16 @@ const loginSubmit = async (e, loginData, messageOpen, setMessageOpen, navigate, 
   e.preventDefault();
   await login(loginData, navigate).then((result) => {
     if (result.error) {
-      setMessageOpen({show: true, status: "failed", message: result.message});
+      setMessageOpen({ show: true, status: "failed", message: result.message });
       setTimeout(() => {
-        setMessageOpen({...messageOpen, status: "failed", show: false});
+        setMessageOpen({ ...messageOpen, status: "failed", show: false });
       }, 4000);
     } else {
       // dispatch(setLoggedUser(result.data));
-      setMessageOpen({show: true, status: "success", message: "Successfully LoggedIn"});
+      setMessageOpen({ show: true, status: "success", message: "Successfully LoggedIn" });
       dispatch(setLoggedUser(result.data));
       setTimeout(() => {
-        setMessageOpen({...messageOpen, status: "success", show: false});
+        setMessageOpen({ ...messageOpen, status: "success", show: false });
       }, 4000);
     }
   });
@@ -53,8 +54,9 @@ const logout = async (e, dispatch, navigate) => {
   dispatch(logoutUser());
   let res = await logOut();
   if (res.statusText == "OK") {
+    dispatch(setProjectList([]))
     navigate("/");
   }
 };
 
-export {signinFieldHandler, loginFieldHandler, submitSignup, loginSubmit, logout};
+export { signinFieldHandler, loginFieldHandler, submitSignup, loginSubmit, logout };
