@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const protectedAuthMid = async (req, res, next) => {
   try {
-    console.log("protectedAuthMid:::: ", req.cookies._3DDesigner_token);
+    // console.log("protectedAuthMid:::: ", req.cookies._3DDesigner_token);
     const token = req.cookies._3DDesigner_token;
     let decodedData;
 

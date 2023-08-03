@@ -11,12 +11,15 @@ import Menu from "@mui/material/Menu";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../handlers/authHandlers";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Header() {
   const user = useSelector((state) => state.user.user);
+  const projectName = useSelector((state) => state.projects.currentProjectDetails.projectName)
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [anchor, setAnchor] = React.useState(false);
 
@@ -33,15 +36,21 @@ export default function Header() {
     navigate("/DashboardPage")
   }
 
+  // React.useEffect(() => {
+  //   console.log("locationheader:::: ", location.pathname.split("/")[1] == "DesignerPage")
+  // }, [location])
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" style={{ backgroundColor: "#e2e2e1", color: "black" }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            3D Interior Designer
+            3D Interior Designer {location.pathname.split("/")[1] == "DesignerPage" && <span style={{ fontSize: "16px", fontWeight: "450" }}>/ {projectName}</span>}
           </Typography>
+
           {user.email && (
-            <div>
+            <div style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+              <span onClick={(e) => handleMenu(e)}>{user.firstName} {user.lastName}</span>
               <IconButton
                 size="large"
                 aria-label="account of current user"

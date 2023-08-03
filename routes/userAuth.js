@@ -60,7 +60,7 @@ userAuth.post("/signup", async (req, res) => {
     const lastName = req.body.LastName;
     const email = req.body.Email;
     const password = req.body.Password;
-    console.log(firstName, lastName, email, password);
+    // console.log(firstName, lastName, email, password);
     const existUser = await users.findOne({ email });
     if (existUser) return res.status(400).json({ message: "Email already exists" });
 
@@ -97,7 +97,7 @@ userAuth.post("/login", async (req, res) => {
     const password = req.body.Password;
     const result = await users.findOne({ email });
 
-    console.log(email, password);
+    // console.log(email, password);
     if (!result) return res.status(404).json({ message: "No user found" });
 
     const isPasswordCorrect = await bcrypt.compare(password, result.password);
@@ -130,7 +130,7 @@ userAuth.get("/logOut", async (req, res) => {
 });
 
 userAuth.get("/protectedCheckJWT", protected, async (req, res) => {
-  console.log("protectedCheckJWT API:::: ", req.cookies._3DDesigner_token);
+  // console.log("protectedCheckJWT API:::: ", req.cookies._3DDesigner_token);
   res.status(200).json({ message: "protected route is accessed" });
 });
 

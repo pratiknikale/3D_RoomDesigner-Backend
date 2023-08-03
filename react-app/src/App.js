@@ -51,7 +51,7 @@ function App() {
             <Route exact path="/" element={<Auth setMessageOpen={setMessageOpen} messageOpen={messageOpen} />} />
             <Route element={<ProtectedRoute />}>
               <Route exact path="/DashboardPage" element={<DashboardPage />} />
-              <Route exact path="/DesignerPage" element={<DesignerPage />} />
+              <Route exact path="/DesignerPage/:id" element={<DesignerPage />} />
             </Route>
           </Routes>
           {/* <Footer /> */}
