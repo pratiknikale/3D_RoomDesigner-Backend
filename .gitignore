@@ -8,7 +8,7 @@
 
 # testing
 /react-app/coverage
-
+/react-app
 # production
 /react-app/build
 
