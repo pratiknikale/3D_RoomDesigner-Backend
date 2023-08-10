@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const database = require("./config/db");
 const userAuthRoute = require("./routes/userAuth");
 const projectsRoute = require("./routes/projects");
+const elementsRoute = require("./routes/elements")
 // const cookieSession = require("cookie-session");
 const passport = require("passport");
 const passportSetup = require("./passport");
@@ -52,6 +53,7 @@ app.get("/", (req, res) => {
 
 app.use("/userAuth", userAuthRoute);
 app.use("/projects", projectsRoute);
+app.use("/elements", elementsRoute);
 
 // PORT
 const port = process.env.PORT || 8000;

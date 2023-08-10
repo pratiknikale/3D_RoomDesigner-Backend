@@ -42,6 +42,7 @@ projectRoute.post("/newProject", protected, async (req, res) => {
             elementType: "Floor",
             material: "",
             color: "lightgrey",
+            visible: true,
             length: 12,
             width: 12,
             height: 0,
