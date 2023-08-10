@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const database = require("./config/db");
 const userAuthRoute = require("./routes/userAuth");
+const projectsRoute = require("./routes/projects");
+const elementsRoute = require("./routes/elements")
 // const cookieSession = require("cookie-session");
 const passport = require("passport");
 const passportSetup = require("./passport");
@@ -31,8 +33,8 @@ mongoose
 // app.use(passport.initialize());
 // app.use(passport.session());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cors({origin: "http://localhost:3000", credentials: true}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(cookieParser());
 
 // Static directory path
@@ -50,6 +52,8 @@ app.get("/", (req, res) => {
 //Routes
 
 app.use("/userAuth", userAuthRoute);
+app.use("/projects", projectsRoute);
+app.use("/elements", elementsRoute);
 
 // PORT
 const port = process.env.PORT || 8000;

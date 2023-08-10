@@ -26,11 +26,11 @@ userAuth.get("/login/failure", (req, res) => {
   });
 });
 
-userAuth.get("/google", passport.authenticate("google", {scope: ["profile"]}));
+userAuth.get("/google", passport.authenticate("google", { scope: ["profile"] }));
 userAuth.get(
   "/google/callback",
   passport.authenticate("google", {
-    // successRedirect: "http://localhost:3000/DesignerPage",
+    // successRedirect: "http://localhost:3000/DashboardPage",
     failureRedirect: "http://localhost:3000",
     session: false,
   }),
@@ -41,14 +41,14 @@ userAuth.get(
         // const jsonString = JSON.stringify({message: "something went wrong"});
         res.status(400).redirect("http://localhost:3000");
       } else {
-        const jsonStringSuccess = JSON.stringify({result: req.user.result, token: req.user.token});
+        const jsonStringSuccess = JSON.stringify({ result: req.user.result, token: req.user.token });
         res.cookie("_3DDesigner_token", req.user.token, {
           secure: false,
           httpOnly: true,
           maxAge: 12 * 60 * 60 * 1000,
         });
         res.cookie("3DDesigner_userProfile", req.user.result);
-        res.status(200).redirect("http://localhost:3000/DesignerPage");
+        res.status(200).redirect("http://localhost:3000/DashboardPage");
       }
     }
   }
@@ -60,9 +60,9 @@ userAuth.post("/signup", async (req, res) => {
     const lastName = req.body.LastName;
     const email = req.body.Email;
     const password = req.body.Password;
-    console.log(firstName, lastName, email, password);
-    const existUser = await users.findOne({email});
-    if (existUser) return res.status(400).json({message: "Email already exists"});
+    // console.log(firstName, lastName, email, password);
+    const existUser = await users.findOne({ email });
+    if (existUser) return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -75,7 +75,7 @@ userAuth.post("/signup", async (req, res) => {
       });
 
       const result = await newUser.save();
-      const token = jwt.sign({email: result.email, id: result._id}, process.env.JWT_SECRET_KEY, {expiresIn: "1d"});
+      const token = jwt.sign({ email: result.email, id: result._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
 
       res.cookie("_3DDesigner_token", token, {
         secure: false,
@@ -95,16 +95,16 @@ userAuth.post("/login", async (req, res) => {
   try {
     const email = req.body.Email;
     const password = req.body.Password;
-    const result = await users.findOne({email});
+    const result = await users.findOne({ email });
 
-    console.log(email, password);
-    if (!result) return res.status(404).json({message: "No user found"});
+    // console.log(email, password);
+    if (!result) return res.status(404).json({ message: "No user found" });
 
     const isPasswordCorrect = await bcrypt.compare(password, result.password);
 
-    if (!isPasswordCorrect) return res.status(400).json({message: "Invalid Password"});
+    if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid Password" });
 
-    const token = jwt.sign({email: email, id: result._id}, process.env.JWT_SECRET_KEY, {expiresIn: "1d"});
+    const token = jwt.sign({ email: email, id: result._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
     res.cookie("_3DDesigner_token", token, {
       secure: false,
       httpOnly: true,
@@ -112,7 +112,7 @@ userAuth.post("/login", async (req, res) => {
     });
     res.status(200).json(result);
   } catch (err) {
-    res.status(500).json({message: "Something went wrong"});
+    res.status(500).json({ message: "Something went wrong" });
     console.log(err);
   }
 });
@@ -124,14 +124,14 @@ userAuth.get("/logOut", async (req, res) => {
 
     res.send();
   } catch (err) {
-    res.status(500).json({message: "Something went wrong"});
+    res.status(500).json({ message: "Something went wrong" });
     console.log(err);
   }
 });
 
 userAuth.get("/protectedCheckJWT", protected, async (req, res) => {
-  console.log("protectedCheckJWT API:::: ", req.cookies._3DDesigner_token);
-  res.status(200).json({message: "protected route is accessed"});
+  // console.log("protectedCheckJWT API:::: ", req.cookies._3DDesigner_token);
+  res.status(200).json({ message: "protected route is accessed" });
 });
 
 module.exports = userAuth;
