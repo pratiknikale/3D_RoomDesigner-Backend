@@ -78,7 +78,7 @@ userAuth.post("/signup", async (req, res) => {
       const token = jwt.sign({ email: result.email, id: result._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
 
       res.cookie("_3DDesigner_token", token, {
-        secure: false,
+        secure: true,
         httpOnly: true,
         maxAge: 12 * 60 * 60 * 1000,
       });
@@ -106,7 +106,7 @@ userAuth.post("/login", async (req, res) => {
 
     const token = jwt.sign({ email: email, id: result._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
     res.cookie("_3DDesigner_token", token, {
-      secure: false,
+      secure: true,
       httpOnly: true,
       maxAge: 12 * 60 * 60 * 1000,
     });
