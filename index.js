@@ -14,6 +14,8 @@ const cookieParser = require("cookie-parser");
 var cors = require("cors");
 require("dotenv").config();
 
+app.set("trust proxy", 1);
+
 mongoose.Promise = global.Promise;
 mongoose
   .connect(database.url, {
