@@ -81,6 +81,7 @@ userAuth.post("/signup", async (req, res) => {
         secure: true,
         httpOnly: true,
         maxAge: 12 * 60 * 60 * 1000,
+        sameSite: "none"
       });
       res.status(200).json(result);
     };
@@ -109,6 +110,7 @@ userAuth.post("/login", async (req, res) => {
       secure: true,
       httpOnly: true,
       maxAge: 12 * 60 * 60 * 1000,
+      sameSite: "none"
     });
     res.status(200).json(result);
   } catch (err) {
