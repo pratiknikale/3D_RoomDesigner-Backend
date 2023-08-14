@@ -1,5 +1,4 @@
 const express = require("express");
-const app = express();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userAuth = express.Router();
@@ -31,24 +30,21 @@ userAuth.get(
   "/google/callback",
   passport.authenticate("google", {
     // successRedirect: "http://localhost:3000/DashboardPage",
-    failureRedirect: "http://localhost:3000",
+    failureRedirect: process.env.FRONTEND_URL,
     session: false,
   }),
   (req, res) => {
     if (req.user) {
       if (!req.user.token) {
-        // return res.status(400).json({message: "Email already exists"});
-        // const jsonString = JSON.stringify({message: "something went wrong"});
-        res.status(400).redirect("http://localhost:3000");
+        res.status(400).redirect(process.env.FRONTEND_URL);
       } else {
-        const jsonStringSuccess = JSON.stringify({ result: req.user.result, token: req.user.token });
         res.cookie("_3DDesigner_token", req.user.token, {
           secure: false,
           httpOnly: true,
           maxAge: 12 * 60 * 60 * 1000,
         });
         res.cookie("3DDesigner_userProfile", req.user.result);
-        res.status(200).redirect("http://localhost:3000/DashboardPage");
+        res.status(200).redirect(`${process.env.FRONTEND_URL}/DashboardPage`);
       }
     }
   }
@@ -56,8 +52,6 @@ userAuth.get(
 
 userAuth.post("/signup", async (req, res) => {
   try {
-    const firstName = req.body.FirstName;
-    const lastName = req.body.LastName;
     const email = req.body.Email;
     const password = req.body.Password;
     // console.log(firstName, lastName, email, password);
