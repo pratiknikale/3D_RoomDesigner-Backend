@@ -33,7 +33,7 @@ GOOGLE_CLIENT_ID =
 GOOGLE_CLIENT_SECRET = 
 ```
 
-3. Run the React.JS Development Server
+3. Run the Node.JS Development Server
 
 ```bash
 npm start
