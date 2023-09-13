@@ -11,7 +11,14 @@ projectRoute.get("/getSelectedProjDetails/:id", protected, async (req, res) => {
     console.log("/getSelectedProjDetails/:id", req.params.id)
     try {
 
-        const projectDetails = await project.findById(req.params.id).populate("elements.Floor").populate("elements.Wall");
+        const projectDetails = await project.findById(req.params.id).populate("elements.Floor").populate({
+            path: 'elements.Wall',
+            model: element,
+            populate: {
+                path: 'subElements',
+                model: element
+            }
+        });
 
         if (projectDetails) {
             res.status(200).send(projectDetails);
