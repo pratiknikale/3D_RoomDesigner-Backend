@@ -39,9 +39,10 @@ userAuth.get(
         res.status(400).redirect(process.env.FRONTEND_URL);
       } else {
         res.cookie("_3DDesigner_token", req.user.token, {
-          secure: false,
+          secure: true,
           httpOnly: true,
           maxAge: 12 * 60 * 60 * 1000,
+          sameSite: "none"
         });
         res.cookie("3DDesigner_userProfile", req.user.result);
         res.status(200).redirect(`${process.env.FRONTEND_URL}/DashboardPage`);
