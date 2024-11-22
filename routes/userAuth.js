@@ -3,51 +3,51 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userAuth = express.Router();
 const users = require("../modals/users");
-const passport = require("passport");
 const protected = require("./protectedAuthMid");
+// const passport = require("passport");
 // const auth = require("../middleware/auth");
 
-userAuth.get("/login/success", (req, res) => {
-  if (req.user) {
-    res.status(200).json({
-      success: true,
-      message: "success",
-      user: req.user,
-      // jwt:
-    });
-  }
-});
+// userAuth.get("/login/success", (req, res) => {
+//   if (req.user) {
+//     res.status(200).json({
+//       success: true,
+//       message: "success",
+//       user: req.user,
+//       // jwt:
+//     });
+//   }
+// });
 
-userAuth.get("/login/failure", (req, res) => {
-  res.status(401).json({
-    success: false,
-    message: "failure",
-  });
-});
+// userAuth.get("/login/failure", (req, res) => {
+//   res.status(401).json({
+//     success: false,
+//     message: "failure",
+//   });
+// });
 
-userAuth.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-userAuth.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    // successRedirect: "http://localhost:3000/DashboardPage",
-    failureRedirect: process.env.FRONTEND_URL,
-    session: false,
-  }),
-  (req, res) => {
-    if (req.user) {
-      if (!req.user.token) {
-        res.status(400).redirect(process.env.FRONTEND_URL);
-      } else {
-        res.cookie("_3DDesigner_token", req.user.token, {
-          secure: true,
-          httpOnly: true,
-          maxAge: 12 * 60 * 60 * 1000,
-          sameSite: "none"
-        }).cookie("3DDesigner_userProfile", req.user.result).status(200).redirect(`${process.env.FRONTEND_URL}/DashboardPage`);
-      }
-    }
-  }
-);
+// userAuth.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+// userAuth.get(
+//   "/google/callback",
+//   passport.authenticate("google", {
+//     // successRedirect: "http://localhost:3000/DashboardPage",
+//     failureRedirect: process.env.FRONTEND_URL,
+//     session: false,
+//   }),
+//   (req, res) => {
+//     if (req.user) {
+//       if (!req.user.token) {
+//         res.status(400).redirect(process.env.FRONTEND_URL);
+//       } else {
+//         res.cookie("_3DDesigner_token", req.user.token, {
+//           secure: true,
+//           httpOnly: true,
+//           maxAge: 12 * 60 * 60 * 1000,
+//           sameSite: "none"
+//         }).cookie("3DDesigner_userProfile", req.user.result).status(200).redirect(`${process.env.FRONTEND_URL}/DashboardPage`);
+//       }
+//     }
+//   }
+// );
 
 userAuth.post("/signup", async (req, res) => {
   try {
@@ -70,13 +70,7 @@ userAuth.post("/signup", async (req, res) => {
       const result = await newUser.save();
       const token = jwt.sign({ email: result.email, id: result._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
 
-      res.cookie("_3DDesigner_token", token, {
-        secure: true,
-        httpOnly: true,
-        maxAge: 12 * 60 * 60 * 1000,
-        sameSite: "none"
-      });
-      res.status(200).json(result);
+      res.status(200).json({result, token});
     };
 
     saveUser();
@@ -99,30 +93,25 @@ userAuth.post("/login", async (req, res) => {
     if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid Password" });
 
     const token = jwt.sign({ email: email, id: result._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
-    res.cookie("_3DDesigner_token", token, {
-      secure: true,
-      httpOnly: true,
-      maxAge: 12 * 60 * 60 * 1000,
-      sameSite: "none"
-    });
-    res.status(200).json(result);
+    
+    res.status(200).json({result, token});
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });
     console.log(err);
   }
 });
 
-userAuth.get("/logOut", async (req, res) => {
-  try {
-    res.clearCookie("_3DDesigner_token");
-    res.clearCookie("3DDesigner_userProfile");
+// userAuth.get("/logOut", async (req, res) => {
+//   try {
+//     res.clearCookie("_3DDesigner_token");
+//     res.clearCookie("3DDesigner_userProfile");
 
-    res.send();
-  } catch (err) {
-    res.status(500).json({ message: "Something went wrong" });
-    console.log(err);
-  }
-});
+//     res.send();
+//   } catch (err) {
+//     res.status(500).json({ message: "Something went wrong" });
+//     console.log(err);
+//   }
+// });
 
 userAuth.get("/protectedCheckJWT", protected, async (req, res) => {
   // console.log("protectedCheckJWT API:::: ", req.cookies._3DDesigner_token);

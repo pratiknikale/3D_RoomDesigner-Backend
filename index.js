@@ -6,10 +6,10 @@ const database = require("./config/db");
 const userAuthRoute = require("./routes/userAuth");
 const projectsRoute = require("./routes/projects");
 const elementsRoute = require("./routes/elements")
-// const cookieSession = require("cookie-session");
-const passport = require("passport");
-const passportSetup = require("./passport");
 const cookieParser = require("cookie-parser");
+// const cookieSession = require("cookie-session");
+// const passport = require("passport");
+// const passportSetup = require("./passport");
 
 var cors = require("cors");
 require("dotenv").config();
